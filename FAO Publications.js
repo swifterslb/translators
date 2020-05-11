@@ -328,7 +328,6 @@ function doWeb(doc, url) {
 }
 
 // Note on test cases: Because the pages use dynamic elements (which is also why the translator doesn't work for multiple item pages), automatic test in Scaffold doesn't work. Every time a test is needed, use "New Web" to manually add it.
-
 /** BEGIN TEST CASES **/
 var testCases = [
 	{
@@ -836,7 +835,22 @@ var testCases = [
 						"tag": "market gardens"
 					},
 					{
-						"tag": "meetings"
+						"tag": "营养监督"
+					},
+					{
+						"tag": "进食"
+					},
+					{
+						"tag": "食品供应链"
+					},
+					{
+						"tag": "食品工业"
+					},
+					{
+						"tag": "食物政策"
+					},
+					{
+						"tag": "食物的获得"
 					},
 					{
 						"tag": "sustainable agriculture"
