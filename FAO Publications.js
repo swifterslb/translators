@@ -33,7 +33,6 @@ function detectWeb(doc, url) {
 	if (url.includes('card')) {
 		return 'book';
 	}
-
 	/* Multiples currently don't load properly
 	else if (getSearchResults(doc, true)) {
 		return 'multiple';
@@ -69,7 +68,6 @@ function scrape(doc, url) {
 		//* ********* Begin fixed-location variables **********
 
 		// Some variables always appear and appear at the same location in all document pages.
-
 		// abstract
 		var abs = doc.getElementById("mainContentN0");
 		// The childrens of `abs` are the label "Abstract:" in a strong-tag,
@@ -198,7 +196,6 @@ function scrape(doc, url) {
 
 		for (let key in existingMeta) {
 			var metaResult = cleanMeta(existingMeta[key]);
-
 			// date
 			if (key.includes('date')) {
 				newItem.date = metaResult;
@@ -331,7 +328,6 @@ function doWeb(doc, url) {
 }
 
 // Note on test cases: Because the pages use dynamic elements (which is also why the translator doesn't work for multiple item pages), automatic test in Scaffold doesn't work. Every time a test is needed, use "New Web" to manually add it.
-
 /** BEGIN TEST CASES **/
 var testCases = [
 	{
