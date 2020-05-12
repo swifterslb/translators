@@ -33,7 +33,7 @@ function detectWeb(doc, url) {
 	if (url.includes('card')) {
 		return 'book';
 	}
-	
+
 	/* Multiples currently don't load properly
 	else if (getSearchResults(doc, true)) {
 		return 'multiple';
@@ -329,6 +329,7 @@ function doWeb(doc, url) {
 }
 
 // Note on test cases: Because the pages use dynamic elements (which is also why the translator doesn't work for multiple item pages), automatic test in Scaffold doesn't work. Every time a test is needed, use "New Web" to manually add it.
+
 /** BEGIN TEST CASES **/
 var testCases = [
 	{
