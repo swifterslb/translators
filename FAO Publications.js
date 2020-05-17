@@ -9,7 +9,7 @@
 	"inRepository": true,
 	"translatorType": 4,
 	"browserSupport": "gcsibv",
-	"lastUpdated": "2020-05-16 22:01:25"
+	"lastUpdated": "2020-05-17 12:27:13"
 }
 
 /*
