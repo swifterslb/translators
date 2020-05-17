@@ -9,7 +9,7 @@
 	"inRepository": true,
 	"translatorType": 4,
 	"browserSupport": "gcsibv",
-	"lastUpdated": "2020-05-16 22:01:25"
+	"lastUpdated": "2020-05-17 12:27:13"
 }
 
 /*
@@ -153,7 +153,7 @@ function scrape(doc, url) {
 		if (!subTitle) {
 			newItem.title = mainTitle;
 		}
-		else if ((newItem.language == 'zh') || (newItem.language == 'ja')) {
+		else if ((newItem.language == 'zh') || (newItem.language == 'ja') || (newItem.language == 'ko')) {
 			newItem.title = mainTitle + '：' + subTitle;
 		}
 		else {
