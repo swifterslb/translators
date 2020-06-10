@@ -58,7 +58,7 @@ function scrape(doc, url) {
 	if (url.includes('card')) {
 		// attach document card URL and snapshot
 		// TEMP: Disable at least until we have post-JS snapshots
-		/* newItem.attachments.push({
+		/*newItem.attachments.push({
 			url: url,
 			title: 'FAO Document Record Snapshot',
 			mimeType: 'text/html',
@@ -112,10 +112,8 @@ function scrape(doc, url) {
 			title: 'Full Text PDF',
 			mimeType: 'application/pdf'
 		});
-		// url when DOI doesn't exist
-		if (!abs.innerText.includes(DOILead)) {
-			newItem.url = url;
-		}
+		// url
+		newItem.url = url;
 		// language: 2 or 3 letters following ISO 639
 		// indicated by the last 1-3 letters in PDF file name (langCode)
 		// One good example is the various language versions of http://www.fao.org/publications/card/en/c/I2801E
@@ -418,7 +416,7 @@ var testCases = [
 				"publisher": "FAO",
 				"series": "FAO Fisheries and Aquaculture Circular",
 				"seriesNumber": "No. 1207",
-				"url": "https://doi.org/10.4060/ca8751en",
+				"url": "http://www.fao.org/documents/card/en/c/ca8751en/",
 				"attachments": [
 					{
 						"title": "FAO Document Record Snapshot",
@@ -550,7 +548,7 @@ var testCases = [
 				"place": "Rome, Italy",
 				"publisher": "FAO",
 				"shortTitle": "FAO publications catalogue 2020",
-				"url": "https://doi.org/10.4060/ca7988en",
+				"url": "http://www.fao.org/documents/card/en/c/ca7988en/",
 				"attachments": [
 					{
 						"title": "FAO Document Record Snapshot",
@@ -869,12 +867,12 @@ var testCases = [
 				"notes": [],
 				"seeAlso": []
 			}
-		]
+		],
+		"defer": true
 	},
 	{
 		"type": "web",
 		"url": "http://www.fao.org/publications/card/ar/c/c6c2c8d7-3683-53a7-ab58-ce480c65f36c/",
-		"defer": true,
 		"items": [
 			{
 				"itemType": "book",
@@ -926,7 +924,8 @@ var testCases = [
 				"notes": [],
 				"seeAlso": []
 			}
-		]
+		],
+		"defer": true
 	}
 ]
 /** END TEST CASES **/
