@@ -9,7 +9,7 @@
 	"inRepository": true,
 	"translatorType": 4,
 	"browserSupport": "gcsibv",
-	"lastUpdated": "2016-09-04 09:34:44"
+	"lastUpdated": "2019-11-02 15:43:51"
 }
 
 /*
@@ -44,7 +44,7 @@ function detectWeb(doc, url) {
 	
 	var citLinks = ZU.xpath(doc, '//a[contains(@href, "/action/showCitFormats")]');
 	if (citLinks.length > 0) {
-		if (url.indexOf('/doi/book/') != -1) {
+		if (url.includes('/doi/book/')) {
 			return 'book';
 		}
 		else if (url.search(/\.ch\d+$/)!=-1){
@@ -132,7 +132,7 @@ function buildPdfUrl(url, root) {
 		}
 	}
 	
-	Z.debug('PDF link not found.')
+	Z.debug('PDF link not found.');
 	if (root.nodeType != 9 /*DOCUMENT_NODE*/) {
 		Z.debug('Available links:');
 		var links = root.getElementsByTagName('a');
@@ -209,7 +209,7 @@ function scrape(doc, url, extras) {
 			translator.setTranslator("32d59d2d-b65a-4da4-b0a3-bdd3cfb979e7");
 			translator.setString(text);
 			translator.setHandler("itemDone", function (obj, item) {
-				// Sometimes we get titles and authros in all caps
+				// Sometimes we get titles and authors in all caps
 				item.title = fixCase(item.title);
 				
 				for (var i=0; i<item.creators.length; i++) {
@@ -220,13 +220,9 @@ function scrape(doc, url, extras) {
 				}
 				
 				item.url = url;
-				//for Emerald, get rid of the "null" that they add at the end of every title:
-				if (url.indexOf("www.emeraldinsight.com")!=-1){
-					item.title = item.title.replace(/null$/, "")
-				}
 				item.notes = [];
 				for (var i in tags){
-					item.tags.push(tags[i].textContent)
+					item.tags.push(tags[i].textContent);
 				}
 				
 				if (abstract) {
@@ -257,7 +253,7 @@ function scrape(doc, url, extras) {
 			});
 			translator.translate();
 		});
-	})
+	});
 }
 
 /** BEGIN TEST CASES **/
@@ -366,6 +362,7 @@ var testCases = [
 				"date": "January 1, 2001",
 				"ISBN": "9780898714784",
 				"abstractNote": "The first part of this monograph's title, Combinatorial Data Analysis (CDA), refers to a wide class of methods for the study of relevant data sets in which the arrangement of a collection of objects is absolutely central. Characteristically, CDA is involved either with the identification of arrangements that are optimal for a specific representation of a given data set (usually operationalized with some specific loss or merit function that guides a combinatorial search defined over a domain constructed from the constraints imposed by the particular representation selected), or with the determination in a confirmatory manner of whether a specific object arrangement given a priori reflects the observed data. As the second part of the title, Optimization by Dynamic Programming, suggests, the sole focus of this monograph is on the identification of arrangements; it is then restricted further, to where the combinatorial search is carried out by a recursive optimization process based on the general principles of dynamic programming. For an introduction to confirmatory CDA without any type of optimization component, the reader is referred to the monograph by Hubert (1987). For the use of combinatorial optimization strategies other than dynamic programming for some (clustering) problems in CDA, the recent comprehensive review by Hansen and Jaumard (1997) provides a particularly good introduction.",
+				"extra": "DOI: 10.1137/1.9780898718553",
 				"libraryCatalog": "epubs.siam.org (Atypon)",
 				"numPages": "172",
 				"publisher": "Society for Industrial and Applied Mathematics",
@@ -399,6 +396,7 @@ var testCases = [
 				"ISBN": "9780898714784",
 				"abstractNote": "6.1 Introduction There are a variety of extensions of the topics introduced in the previous chapters that could be pursued, several of which have been mentioned earlier along with a comment that they would not be developed in any detail within this monograph. Among some of these possibilities are: (a) the development of a mechanism for generating all the optimal solutions for a specific optimization task when multiple optima may be present, not just one representative exemplar; (b) the incorporation of other loss or merit measures within the various sequencing and partitioning contexts discussed; (c) extensions to the analysis of arbitrary t-mode data, with possible (order) restrictions on some modes but not others, or to a framework in which proximity is given on more than just a pair of objects, e.g., proximity could be defined for all distinct object triples (see Daws (1996)); (d) the generalization of the task of constructing optimal ordered partitions to a two- or higher-mode context that may be hierarchical and/or have various types of order or precedence constraints imposed; and (e) the extension of object ordering constraints when they are to be imposed (e.g., in various partitioning and two-mode sequencing tasks) to the use of circular object orders, where optimal subsets or ordered sequences must now be consistent with respect to a circular contiguity structure.",
 				"bookTitle": "Combinatorial Data Analysis",
+				"extra": "DOI: 10.1137/1.9780898718553.ch6",
 				"libraryCatalog": "epubs.siam.org (Atypon)",
 				"numberOfVolumes": "0",
 				"pages": "103-114",
@@ -423,7 +421,7 @@ var testCases = [
 	},
 	{
 		"type": "web",
-		"url": "http://online.liebertpub.com/doi/abs/10.1089/cmb.2009.0238",
+		"url": "https://www.liebertpub.com/doi/abs/10.1089/cmb.2009.0238",
 		"items": [
 			{
 				"itemType": "journalArticle",
@@ -447,15 +445,14 @@ var testCases = [
 				],
 				"date": "October 20, 2010",
 				"DOI": "10.1089/cmb.2009.0238",
-				"ISSN": "1066-5277",
 				"abstractNote": "An accurate genome sequence of a desired species is now a pre-requisite for genome research. An important step in obtaining a high-quality genome sequence is to correctly assemble short reads into longer sequences accurately representing contiguous genomic regions. Current sequencing technologies continue to offer increases in throughput, and corresponding reductions in cost and time. Unfortunately, the benefit of obtaining a large number of reads is complicated by sequencing errors, with different biases being observed with each platform. Although software are available to assemble reads for each individual system, no procedure has been proposed for high-quality simultaneous assembly based on reads from a mix of different technologies. In this paper, we describe a parallel short-read assembler, called Ray, which has been developed to assemble reads obtained from a combination of sequencing platforms. We compared its performance to other assemblers on simulated and real datasets. We used a combination of Roche/454 and Illumina reads to assemble three different genomes. We showed that mixing sequencing technologies systematically reduces the number of contigs and the number of errors. Because of its open nature, this new tool will hopefully serve as a basis to develop an assembler that can be of universal utilization (availability: http://deNovoAssembler.sf.Net/). For online Supplementary Material, see www.liebertonline.com.",
 				"issue": "11",
 				"journalAbbreviation": "Journal of Computational Biology",
-				"libraryCatalog": "online.liebertpub.com (Atypon)",
+				"libraryCatalog": "liebertpub.com (Atypon)",
 				"pages": "1519-1533",
 				"publicationTitle": "Journal of Computational Biology",
 				"shortTitle": "Ray",
-				"url": "http://online.liebertpub.com/doi/abs/10.1089/cmb.2009.0238",
+				"url": "https://www.liebertpub.com/doi/abs/10.1089/cmb.2009.0238",
 				"volume": "17",
 				"attachments": [
 					{
@@ -550,52 +547,6 @@ var testCases = [
 				"shortTitle": "Block Copolymer Thin Films",
 				"url": "http://www.annualreviews.org/doi/abs/10.1146/annurev.matsci.31.1.323",
 				"volume": "31",
-				"attachments": [
-					{
-						"title": "Full Text PDF",
-						"mimeType": "application/pdf"
-					},
-					{
-						"title": "Snapshot",
-						"mimeType": "text/html"
-					}
-				],
-				"tags": [],
-				"notes": [],
-				"seeAlso": []
-			}
-		]
-	},
-	{
-		"type": "web",
-		"url": "http://www.emeraldinsight.com/toc/sajgbr/2/2",
-		"items": "multiple"
-	},
-	{
-		"type": "web",
-		"url": "http://www.emeraldinsight.com/doi/full/10.1108/SAJGBR-10-2012-0120",
-		"items": [
-			{
-				"itemType": "journalArticle",
-				"title": "Irish coffee? Well, something better …",
-				"creators": [
-					{
-						"lastName": "Pramila Rao",
-						"creatorType": "author",
-						"fieldMode": 1
-					}
-				],
-				"date": "August 16, 2013",
-				"DOI": "10.1108/SAJGBR-10-2012-0120",
-				"ISSN": "2045-4457",
-				"issue": "2",
-				"journalAbbreviation": "S Asian Jnl of Global Bus Res",
-				"libraryCatalog": "emeraldinsight.com (Atypon)",
-				"pages": "165-171",
-				"publicationTitle": "South Asian Journal of Global Business Research",
-				"shortTitle": "Irish coffee?",
-				"url": "http://www.emeraldinsight.com/doi/full/10.1108/SAJGBR-10-2012-0120",
-				"volume": "2",
 				"attachments": [
 					{
 						"title": "Full Text PDF",

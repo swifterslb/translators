@@ -58,13 +58,14 @@ function scrape(doc, url) {
 
 	if (url.includes('card')) {
 		// attach document card URL and snapshot
-		newItem.attachments.push({
+		// TEMP: Disable at least until we have post-JS snapshots
+		/* newItem.attachments.push({
 			url: url,
 			title: 'FAO Document Record Snapshot',
 			mimeType: 'text/html',
 			snapshot: true
-		});
-
+		}); */
+    
 		//* ********* Begin fixed-location variables **********
 
 		// Some variables always appear and appear at the same location in all document pages.
@@ -110,30 +111,42 @@ function scrape(doc, url) {
 			title: 'Full Text PDF',
 			mimeType: 'application/pdf'
 		});
-		// url
-		newItem.url = url;
-		// language: according to the last one (old format) or two (new format) letters of PDF file name
-		var langOld = pdfUrl.charAt(pdfUrl.indexOf('pdf') - 2);
-		var langNew = pdfUrl.slice(pdfUrl.indexOf('pdf') - 3, pdfUrl.indexOf('pdf') - 1);
-		if ((langOld == 'a') || (langNew == 'AR') || (langNew == 'ar')) {
+		// url when DOI doesn't exist
+		if (!abs.innerText.includes(DOILead)) {
+			newItem.url = url;
+		}
+		// language: 2 or 3 letters following ISO 639
+		// indicated by the last 1-3 letters in PDF file name (langCode)
+		// One good example is the various language versions of http://www.fao.org/publications/card/en/c/I2801E
+		var langCode = '';
+		var matches = pdfUrl.match(/([a-z]+)\.pdf$/i);
+		if (matches) {
+			langCode = matches[1];
+		}
+		// In the new PDF naming scheme, langCode follows ISO 639.
+		if (langCode.length > 1) {
+			newItem.language = langCode.toLowerCase();
+		}
+		// In the old PDF naming scheme, langCode is one lower/upper case letter and only differentiates between the 6 UN languages.
+		else if ((langCode == 'a') || (langCode == 'A')) {
 			newItem.language = 'ar';
 		}
-		else if ((langOld == 'c') || (langNew == 'ZH') || (langNew == 'zh')) {
+		else if ((langCode == 'c') || (langCode == 'C')) {
 			newItem.language = 'zh';
 		}
-		else if ((langOld == 'e') || (langNew == 'EN') || (langNew == 'en')) {
+		else if ((langCode == 'e') || (langCode == 'E')) {
 			newItem.language = 'en';
 		}
-		else if ((langOld == 'f') || (langNew == 'FR') || (langNew == 'fr')) {
+		else if ((langCode == 'f') || (langCode == 'F')) {
 			newItem.language = 'fr';
 		}
-		else if ((langOld == 'r') || (langNew == 'RU') || (langNew == 'ru')) {
+		else if ((langCode == 'r') || (langCode == 'R')) {
 			newItem.language = 'ru';
 		}
-		else if ((langOld == 's') || (langNew == 'ES') || (langNew == 'es')) {
+		else if ((langCode == 's') || (langCode == 'S')) {
 			newItem.language = 'es';
 		}
-		else {
+		else { // Other languages are usually designated 'o'. Using 'else' just to be safe.
 			newItem.language = 'other';
 		}
 		// title: use colon to connect main title and subtitle (if subtitle exists)
@@ -142,7 +155,7 @@ function scrape(doc, url) {
 		if (!subTitle) {
 			newItem.title = mainTitle;
 		}
-		else if (newItem.language == 'zh') {
+		else if ((newItem.language == 'zh') || (newItem.language == 'ja') || (newItem.language == 'ko')) {
 			newItem.title = mainTitle + '：' + subTitle;
 		}
 		else {
@@ -220,7 +233,7 @@ function scrape(doc, url) {
 					}
 				}
 				else if (metaResult.includes(',')) {
-					newItem.creators.push(ZU.cleanAuthor(metaResult, 'author', true));					
+					newItem.creators.push(ZU.cleanAuthor(metaResult, 'author', true));
 				}
 				else {
 					newItem.creators.push({
@@ -320,7 +333,60 @@ function doWeb(doc, url) {
 var testCases = [
 	{
 		"type": "web",
+		"url": "http://www.fao.org/documents/card/en/c/ca8466en",
+		"defer": true,
+		"items": [
+			{
+				"itemType": "book",
+				"title": "Responding to the impact of the COVID-19 outbreak on food value chains through efficient logistics",
+				"creators": [
+					{
+						"lastName": "FAO",
+						"creatorType": "author",
+						"fieldMode": 1
+					}
+				],
+				"date": "2020",
+				"ISBN": "9789251323717",
+				"abstractNote": "Measures implemented around the world to contain the COVID-19 pandemic have entailed a severe reduction not only in the transportation of goods and services that rely on transport, but also in the migration of labour domestically and internationally. Workers are less available reflecting both disruptions in transportation systems and restrictions to stop the transmission of the disease, within and across borders. \n\nThe Food and Agriculture Organization of the United Nations (FAO) urges countries to maintain functioning food value chains to avoid food shortages, following practices that are being proven to work. This note summarizes some practices that could be useful for governments and the private sector to maintain critical logistical elements in food value chain.\n\nRevised 26 April 2020.\n\nSee the full list of policy briefs related to COVID-19\n\n.",
+				"language": "en",
+				"libraryCatalog": "FAO Publications",
+				"numPages": "4",
+				"place": "Rome, Italy",
+				"publisher": "FAO",
+				"url": "https://doi.org/10.4060/ca8466en",
+				"attachments": [
+					{
+						"title": "Full Text PDF",
+						"mimeType": "application/pdf"
+					}
+				],
+				"tags": [
+					{
+						"tag": "Coronavirus"
+					},
+					{
+						"tag": "agrifood sector"
+					},
+					{
+						"tag": "infectious diseases"
+					},
+					{
+						"tag": "logistics"
+					},
+					{
+						"tag": "value chains"
+					}
+				],
+				"notes": [],
+				"seeAlso": []
+			}
+		]
+	},
+	{
+		"type": "web",
 		"url": "http://www.fao.org/documents/card/en/c/ca8751en/",
+		"defer": true,
 		"items": [
 			{
 				"itemType": "book",
@@ -347,13 +413,8 @@ var testCases = [
 				"publisher": "FAO",
 				"series": "FAO Fisheries and Aquaculture Circular",
 				"seriesNumber": "No. 1207",
-				"url": "http://www.fao.org/documents/card/en/c/ca8751en/",
+				"url": "https://doi.org/10.4060/ca8751en",
 				"attachments": [
-					{
-						"title": "FAO Document Record Snapshot",
-						"mimeType": "text/html",
-						"snapshot": true
-					},
 					{
 						"title": "Full Text PDF",
 						"mimeType": "application/pdf"
@@ -387,6 +448,7 @@ var testCases = [
 	{
 		"type": "web",
 		"url": "http://www.fao.org/documents/card/en/c/I9069EN",
+		"defer": true,
 		"items": [
 			{
 				"itemType": "book",
@@ -413,11 +475,6 @@ var testCases = [
 				"publisher": "FAO",
 				"url": "http://www.fao.org/documents/card/en/c/I9069EN",
 				"attachments": [
-					{
-						"title": "FAO Document Record Snapshot",
-						"mimeType": "text/html",
-						"snapshot": true
-					},
 					{
 						"title": "Full Text PDF",
 						"mimeType": "application/pdf"
@@ -457,6 +514,7 @@ var testCases = [
 	{
 		"type": "web",
 		"url": "http://www.fao.org/documents/card/en/c/ca7988en/",
+		"defer": true,
 		"items": [
 			{
 				"itemType": "book",
@@ -477,13 +535,8 @@ var testCases = [
 				"place": "Rome, Italy",
 				"publisher": "FAO",
 				"shortTitle": "FAO publications catalogue 2020",
-				"url": "http://www.fao.org/documents/card/en/c/ca7988en/",
+				"url": "https://doi.org/10.4060/ca7988en",
 				"attachments": [
-					{
-						"title": "FAO Document Record Snapshot",
-						"mimeType": "text/html",
-						"snapshot": true
-					},
 					{
 						"title": "Full Text PDF",
 						"mimeType": "application/pdf"
@@ -511,6 +564,7 @@ var testCases = [
 	{
 		"type": "web",
 		"url": "http://www.fao.org/publications/card/fr/c/77dbd058-8dd4-4295-af77-23f6b28cc683/",
+		"defer": true,
 		"items": [
 			{
 				"itemType": "book",
@@ -539,11 +593,6 @@ var testCases = [
 				"seriesNumber": "21",
 				"url": "http://www.fao.org/publications/card/fr/c/77dbd058-8dd4-4295-af77-23f6b28cc683/",
 				"attachments": [
-					{
-						"title": "FAO Document Record Snapshot",
-						"mimeType": "text/html",
-						"snapshot": true
-					},
 					{
 						"title": "Full Text PDF",
 						"mimeType": "application/pdf"
@@ -625,6 +674,7 @@ var testCases = [
 	{
 		"type": "web",
 		"url": "http://www.fao.org/publications/card/zh/c/mw246ZH/",
+		"defer": true,
 		"items": [
 			{
 				"itemType": "conferencePaper",
@@ -645,11 +695,6 @@ var testCases = [
 				"publisher": "FAO",
 				"url": "http://www.fao.org/publications/card/zh/c/mw246ZH/",
 				"attachments": [
-					{
-						"title": "FAO Document Record Snapshot",
-						"mimeType": "text/html",
-						"snapshot": true
-					},
 					{
 						"title": "Full Text PDF",
 						"mimeType": "application/pdf"
@@ -716,6 +761,7 @@ var testCases = [
 	{
 		"type": "web",
 		"url": "http://www.fao.org/publications/card/en/c/5014f143-be17-4b58-b90e-f1c6bef344a0/",
+		"defer": true,
 		"items": [
 			{
 				"itemType": "book",
@@ -730,7 +776,7 @@ var testCases = [
 				"date": "2015",
 				"ISBN": "9789251088630",
 				"abstractNote": "This publication is a summary of the workshop held in Bangkok, Thailand from 18 to 20 June 2015 to promote the mainstreaming and up-scaling of Climate-Smart Agriculture in the region. Included in the report are successful case studies that agriculturists have been practicing as a means to address food security under adverse circumstances.",
-				"language": "other",
+				"language": "en",
 				"libraryCatalog": "FAO Publications",
 				"numPages": "106",
 				"place": "Rome, Italy",
@@ -739,11 +785,6 @@ var testCases = [
 				"shortTitle": "Climate-Smart Agriculture",
 				"url": "http://www.fao.org/publications/card/en/c/5014f143-be17-4b58-b90e-f1c6bef344a0/",
 				"attachments": [
-					{
-						"title": "FAO Document Record Snapshot",
-						"mimeType": "text/html",
-						"snapshot": true
-					},
 					{
 						"title": "Full Text PDF",
 						"mimeType": "application/pdf"
@@ -773,6 +814,63 @@ var testCases = [
 					},
 					{
 						"tag": "water harvesting"
+					}
+				],
+				"notes": [],
+				"seeAlso": []
+			}
+		]
+	},
+	{
+		"type": "web",
+		"url": "http://www.fao.org/publications/card/ar/c/c6c2c8d7-3683-53a7-ab58-ce480c65f36c/",
+		"defer": true,
+		"items": [
+			{
+				"itemType": "book",
+				"title": "الخطوط التوجيهية الطوعية بشأن الحوكمة المسؤولة لحيازة الأراضي ومصايد الأسماك والغابات في سياق الأمن الغذائي الوطني",
+				"creators": [
+					{
+						"lastName": "FAO",
+						"creatorType": "author",
+						"fieldMode": 1
+					}
+				],
+				"date": "2012",
+				"abstractNote": "هذه الخطوط التوجيهية هي أول صكّ عالمي شامل خاص بالحيازات وإدارتها  يُعدّ من خلال مفاوضات حكومية دولية. وتضع هذه الخطوط التوجيهية مبادئ ومعايير  مقبولة دولياً للممارسات المسؤولة لاستخدام الأراضي ومصايد الأسماك والغابات وللتحكّم بها.  وهي تعطي توجيهات لتحسين الأطر القانونية والتنظيمية والمتصلة بالسياسات التي تنظّم  حقوق الحيازة  ولزيادة شفافية نظم الحيازة وإدارتها  ولتعزيز القدرات والإجراءات التي  تتخذها الأجهزة العامة ومؤسسات القطاع الخاص ومنظمات المجتمع المدني وجميع  المعنيين بالحيازات وإد ارتها. وتُدرج هذه الخطوط التوجيهية إدارة الحيازات ضمن السياق  الوطني للأمن الغذائي وهي تسعى إلى المساهمة في الإعمال المطرد للحق في غذاء كافٍ  والقضاء على الفقر وحماية البيئة وتحقيق التنمية الاجتماعية والاقتصادية المستدامة.",
+				"language": "ar",
+				"libraryCatalog": "FAO Publications",
+				"numPages": "40",
+				"place": "Rome, Italy",
+				"publisher": "FAO",
+				"url": "http://www.fao.org/publications/card/ar/c/c6c2c8d7-3683-53a7-ab58-ce480c65f36c/",
+				"attachments": [
+					{
+						"title": "Full Text PDF",
+						"mimeType": "application/pdf"
+					}
+				],
+				"tags": [
+					{
+						"tag": "fishery economics"
+					},
+					{
+						"tag": "forestry economics"
+					},
+					{
+						"tag": "gender"
+					},
+					{
+						"tag": "governance"
+					},
+					{
+						"tag": "guidelines"
+					},
+					{
+						"tag": "land tenure"
+					},
+					{
+						"tag": "أمن غذائي"
 					}
 				],
 				"notes": [],
