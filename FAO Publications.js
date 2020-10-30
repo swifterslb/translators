@@ -156,7 +156,7 @@ function scrape(doc, url) {
 		if (!subTitle) {
 			newItem.title = mainTitle;
 		}
-		else if ((newItem.language == 'zh') || (newItem.language == 'ja') || (newItem.language == 'ko')) {
+		else if ((newItem.language == 'zh') || (newItem.language == 'ja')) {
 			newItem.title = mainTitle + '：' + subTitle;
 		}
 		else {
