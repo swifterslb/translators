@@ -33,7 +33,7 @@ function detectWeb(doc, url) {
 	if (url.includes('card')) {
 		return 'book';
 	}
-
+	
 	/* Multiples currently don't load properly
 	else if (getSearchResults(doc, true)) {
 		return 'multiple';
@@ -157,7 +157,7 @@ function scrape(doc, url) {
 		if (!subTitle) {
 			newItem.title = mainTitle;
 		}
-		else if ((newItem.language == 'zh') || (newItem.language == 'ja') || (newItem.language == 'ko')) {
+		else if ((newItem.language == 'zh') || (newItem.language == 'ja')) {
 			newItem.title = mainTitle + '：' + subTitle;
 		}
 		else {
