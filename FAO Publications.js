@@ -33,6 +33,7 @@ function detectWeb(doc, url) {
 	if (url.includes('card')) {
 		return 'book';
 	}
+	
 	/* Multiples currently don't load properly
 	else if (getSearchResults(doc, true)) {
 		return 'multiple';
